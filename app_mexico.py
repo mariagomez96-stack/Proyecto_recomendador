@@ -22,9 +22,6 @@ opcion_puntuacion = st.selectbox(label = ":violet[SELECCIONA UNA PUNTUACIÓN]", 
 if "lista_puntuados" not in st.session_state:
     st.session_state.lista_puntuados = []
 
-if "lista_p_puntuados" not in st.session_state:
-    st.session_state.lista_p_puntuados = []
-
 #Función añadir
 
 def añadir(opcion_seleccion, opcion_puntuacion):
@@ -44,12 +41,12 @@ def añadir(opcion_seleccion, opcion_puntuacion):
 
         st.write(":violet[Este restaurante ya está puntuado]")   
 
-     
-
 
 # Función recomendar
 
 def recomendar():
+    if len(st.session_state.lista_puntuados) == 0:
+        return st.write(":violet[No has puntuado ningún restaurante]")
     # Aplicar one-hot encoding a varias columnas
     columnas_a_codificar = ['alcohol', 'smoking_area', 'dress_code', 'accessibility', 'price', 'Rambience', 'area', 'parking_lot']
 
@@ -113,7 +110,7 @@ def recomendar():
     parking = []
     rating = []
 
-    for nombre in df_recomendador[df_recomendador["Recomendacion"] > 0]["Name"]:
+    for nombre in df_recomendador[df_recomendador["Recomendacion"] > 0]["Name"].to_list():
 
         # Filtra df_filtrado para obtener la fila correspondiente al nombre
         fila = df_filtrado[df_filtrado["Name"] == nombre].iloc[0]  # Se asume que solo hay una fila con ese nombre
